@@ -3,13 +3,14 @@ module Buildkite
 
     class << self
 
-      def list(org: nil, pipeline: nil)
+      def list(org: nil, pipeline: nil, page: 1, per_page: 100, created_from: nil, include_retried_jobs: true)
+        params = {page: page, per_page: per_page, created_from: created_from, include_retried_jobs: include_retried_jobs}.compact
         if org && pipeline
-          response = Client.get_request("organizations/#{org}/pipelines/#{pipeline}/builds")
+          response = Client.get_request("organizations/#{org}/pipelines/#{pipeline}/builds", params: params)
         elsif org
-          response = Client.get_request("organizations/#{org}/builds")
+          response = Client.get_request("organizations/#{org}/builds", params: params)
         else
-          response = Client.get_request("builds")
+          response = Client.get_request("builds", params: params)
         end
 
         if response
