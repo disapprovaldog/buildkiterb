@@ -3,8 +3,8 @@ module Buildkite
 
     class << self
 
-      def list(org: Buildkite.config.org)
-        response = Client.get_request("organizations/#{org}/pipelines")
+      def list(org: Buildkite.config.org, page: 1, per_page: 100)
+        response = Client.get_request("organizations/#{org}/pipelines", params: {page: page, per_page: per_page})
         Collection.from_response(response, type: Pipeline)
       end
 
